@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#07111f">
 
-<title>NEXUS AI | Smart Project Manager</title>
+<title>NEXUS AI — Project Operations Platform</title>
 
 <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
@@ -13,769 +14,992 @@
 <style>
 
 *{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
+ box-sizing:border-box;
+ margin:0;
+ padding:0;
+}
+
+:root{
+ --bg:#07111f;
+ --panel:#0b192b;
+ --panel2:#0e2035;
+ --border:#1b3049;
+ --text:#edf4ff;
+ --muted:#71849d;
+ --primary:#7168ff;
+ --cyan:#00c8ff;
+ --green:#20c997;
+ --orange:#f5ad45;
+ --red:#ff6470;
+ --shadow:0 20px 70px #0005;
+}
+
+body.light{
+ --bg:#f4f7fb;
+ --panel:#ffffff;
+ --panel2:#f7f9fc;
+ --border:#dfe6ef;
+ --text:#172033;
+ --muted:#69788d;
+ --shadow:0 20px 60px #26364d14;
 }
 
 body{
-    font-family:Inter,Arial,sans-serif;
-    background:#07111f;
-    color:#edf4ff;
+ margin:0;
+ background:
+ radial-gradient(circle at 80% 0%,#20235b55,transparent 28%),
+ var(--bg);
+ color:var(--text);
+ font-family:Inter,Arial,sans-serif;
+ transition:.25s;
 }
 
-button,input,select{
-    font:inherit;
+button,input,select,textarea{
+ font:inherit;
 }
 
 button{
-    cursor:pointer;
+ cursor:pointer;
 }
 
 .app{
-    min-height:100vh;
-    display:flex;
-    background:
-        radial-gradient(circle at 80% 10%,#17295a 0,transparent 25%),
-        #07111f;
+ min-height:100vh;
 }
 
 /* SIDEBAR */
 
 .sidebar{
-    width:245px;
-    min-height:100vh;
-    padding:22px 15px;
-    border-right:1px solid #1d3049;
-    background:#0a1627;
-    position:fixed;
-    left:0;
-    top:0;
-    bottom:0;
-    z-index:20;
+ position:fixed;
+ left:0;
+ top:0;
+ bottom:0;
+ width:245px;
+ background:var(--panel);
+ border-right:1px solid var(--border);
+ padding:20px 14px;
+ z-index:50;
 }
 
 .logo{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding:10px;
-    margin-bottom:30px;
+ display:flex;
+ gap:10px;
+ align-items:center;
+ margin:5px 7px 30px;
 }
 
-.logoIcon{
-    width:40px;
-    height:40px;
-    display:grid;
-    place-items:center;
-    border-radius:12px;
-    background:linear-gradient(135deg,#6c63ff,#00c6ff);
-    box-shadow:0 10px 35px #6c63ff55;
-    font-size:21px;
+.logoMark{
+ width:40px;
+ height:40px;
+ display:grid;
+ place-items:center;
+ border-radius:12px;
+ background:linear-gradient(135deg,var(--primary),var(--cyan));
+ box-shadow:0 10px 35px #7168ff55;
+ font-size:21px;
 }
 
-.logoText strong{
-    display:block;
-    letter-spacing:2px;
+.logo strong{
+ display:block;
+ letter-spacing:3px;
+ font-size:14px;
 }
 
-.logoText span{
-    color:#75869e;
-    font-size:10px;
+.logo small{
+ color:var(--muted);
+ font-size:8px;
+ letter-spacing:1.5px;
 }
 
-.sectionTitle{
-    color:#50627b;
-    font-size:9px;
-    letter-spacing:2px;
-    margin:22px 11px 8px;
+.navTitle{
+ color:#50627b;
+ font-size:8px;
+ letter-spacing:2px;
+ margin:22px 10px 7px;
 }
 
 .nav{
-    width:100%;
-    padding:11px;
-    border:0;
-    background:transparent;
-    color:#8495ad;
-    border-radius:9px;
-    display:flex;
-    align-items:center;
-    gap:10px;
-    margin:3px 0;
-    text-align:left;
-    font-size:12px;
+ width:100%;
+ border:0;
+ background:transparent;
+ color:var(--muted);
+ border-radius:9px;
+ padding:11px;
+ display:flex;
+ gap:10px;
+ align-items:center;
+ text-align:left;
+ margin:3px 0;
+ font-size:11px;
 }
 
 .nav:hover,
 .nav.active{
-    background:#6c63ff18;
-    color:#9e97ff;
+ background:#7168ff15;
+ color:#938cff;
 }
 
 .nav.active{
-    box-shadow:inset 3px 0 #7c73ff;
+ box-shadow:inset 3px 0 var(--primary);
 }
 
-.sidebarBottom{
-    position:absolute;
-    left:15px;
-    right:15px;
-    bottom:20px;
-}
-
-.profile{
-    border-top:1px solid #1d3049;
-    padding-top:15px;
-    display:flex;
-    align-items:center;
-    gap:9px;
+.sidebarFooter{
+ position:absolute;
+ left:14px;
+ right:14px;
+ bottom:17px;
+ border-top:1px solid var(--border);
+ padding-top:14px;
+ display:flex;
+ align-items:center;
+ gap:9px;
 }
 
 .avatar{
-    width:32px;
-    height:32px;
-    border-radius:9px;
-    background:linear-gradient(135deg,#6c63ff,#00c6ff);
-    display:grid;
-    place-items:center;
-    font-weight:bold;
-    font-size:12px;
+ width:34px;
+ height:34px;
+ border-radius:10px;
+ background:linear-gradient(135deg,var(--primary),var(--cyan));
+ display:grid;
+ place-items:center;
+ color:white;
+ font-weight:bold;
+ font-size:11px;
 }
 
-.profileText strong{
-    display:block;
-    font-size:11px;
+.userName{
+ font-size:10px;
+ font-weight:bold;
 }
 
-.profileText small{
-    color:#62748d;
-    font-size:9px;
+.userRole{
+ color:var(--muted);
+ font-size:8px;
+ margin-top:3px;
 }
 
 /* MAIN */
 
 .main{
-    margin-left:245px;
-    width:calc(100% - 245px);
-    min-height:100vh;
+ margin-left:245px;
+ min-height:100vh;
 }
 
 .topbar{
-    height:68px;
-    padding:0 30px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    border-bottom:1px solid #1b2b43;
-    background:#081424cc;
-    backdrop-filter:blur(15px);
-    position:sticky;
-    top:0;
-    z-index:10;
-}
-
-.mobileMenu{
-    display:none;
+ height:67px;
+ padding:0 28px;
+ border-bottom:1px solid var(--border);
+ background:var(--panel);
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ position:sticky;
+ top:0;
+ z-index:40;
 }
 
 .search{
-    width:270px;
-    height:35px;
-    display:flex;
-    align-items:center;
-    gap:8px;
-    border:1px solid #223651;
-    background:#0c1a2d;
-    border-radius:8px;
-    padding:0 10px;
+ width:310px;
+ height:36px;
+ border:1px solid var(--border);
+ background:var(--panel2);
+ border-radius:8px;
+ display:flex;
+ align-items:center;
+ padding:0 10px;
+ gap:7px;
 }
 
 .search input{
-    width:100%;
-    border:0;
-    outline:0;
-    color:white;
-    background:transparent;
-    font-size:11px;
+ border:0;
+ outline:0;
+ background:transparent;
+ color:var(--text);
+ width:100%;
+ font-size:10px;
 }
 
-.actions{
-    display:flex;
-    align-items:center;
-    gap:9px;
+.topActions{
+ display:flex;
+ gap:8px;
+ align-items:center;
 }
 
-.iconButton{
-    width:35px;
-    height:35px;
-    border:1px solid #223651;
-    border-radius:8px;
-    background:#0c1a2d;
-    color:#91a2ba;
+.icon{
+ width:36px;
+ height:36px;
+ border:1px solid var(--border);
+ background:var(--panel2);
+ color:var(--muted);
+ border-radius:8px;
 }
 
-.iconButton:hover{
-    color:white;
-    border-color:#6c63ff;
+.icon:hover{
+ color:var(--text);
+ border-color:var(--primary);
 }
 
 .content{
-    padding:35px;
-    max-width:1450px;
-    margin:auto;
+ max-width:1500px;
+ margin:auto;
+ padding:30px;
 }
 
-/* HEAD */
+/* HEADER */
 
-.pageHead{
-    display:flex;
-    align-items:flex-end;
-    justify-content:space-between;
-    margin-bottom:25px;
+.pageHeader{
+ display:flex;
+ justify-content:space-between;
+ align-items:flex-end;
+ margin-bottom:23px;
 }
 
 .eyebrow{
-    color:#827aff;
-    font-size:9px;
-    letter-spacing:2px;
-    font-weight:bold;
+ color:#8179ff;
+ font-size:8px;
+ letter-spacing:2.5px;
+ font-weight:bold;
 }
 
-.pageHead h1{
-    font-size:30px;
-    margin-top:7px;
+.pageHeader h1{
+ font-size:29px;
+ margin-top:7px;
 }
 
-.pageHead h1 span{
-    background:linear-gradient(90deg,#8179ff,#00c6ff);
-    color:transparent;
-    background-clip:text;
+.gradient{
+ background:linear-gradient(90deg,#8179ff,#00c8ff);
+ color:transparent;
+ background-clip:text;
 }
 
-.pageHead p{
-    color:#71839b;
-    font-size:11px;
-    margin-top:6px;
+.pageHeader p{
+ color:var(--muted);
+ font-size:10px;
+ margin-top:6px;
 }
+
+/* BUTTONS */
 
 .primary{
-    border:0;
-    color:white;
-    background:linear-gradient(135deg,#6c63ff,#5148e8);
-    border-radius:8px;
-    padding:11px 15px;
-    font-size:11px;
-    font-weight:bold;
-    box-shadow:0 8px 25px #6c63ff35;
+ border:0;
+ color:white;
+ padding:10px 14px;
+ border-radius:8px;
+ background:linear-gradient(135deg,var(--primary),#5148df);
+ font-size:10px;
+ font-weight:bold;
+ box-shadow:0 10px 30px #7168ff30;
 }
 
-.primary:hover{
-    transform:translateY(-1px);
+.secondary{
+ border:1px solid var(--border);
+ color:var(--muted);
+ background:var(--panel2);
+ padding:9px 12px;
+ border-radius:8px;
+ font-size:9px;
+}
+
+.primary:hover,
+.secondary:hover{
+ transform:translateY(-1px);
 }
 
 /* STATS */
 
 .stats{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:13px;
-    margin-bottom:14px;
+ display:grid;
+ grid-template-columns:repeat(5,1fr);
+ gap:12px;
+ margin-bottom:13px;
 }
 
 .stat{
-    padding:17px;
-    background:#0c192b;
-    border:1px solid #1b2d46;
-    border-radius:12px;
+ background:var(--panel);
+ border:1px solid var(--border);
+ border-radius:11px;
+ padding:15px;
 }
 
 .statTop{
-    display:flex;
-    justify-content:space-between;
-}
-
-.statLabel{
-    color:#71839b;
-    font-size:10px;
+ display:flex;
+ justify-content:space-between;
+ color:var(--muted);
+ font-size:8px;
+ letter-spacing:.8px;
 }
 
 .statIcon{
-    color:#827aff;
-    font-size:17px;
+ color:#8179ff;
+ font-size:15px;
 }
 
 .statValue{
-    font-size:25px;
-    font-weight:bold;
-    margin-top:8px;
+ font-size:23px;
+ font-weight:bold;
+ margin-top:8px;
 }
 
 .statMeta{
-    color:#24c999;
-    font-size:9px;
-    margin-top:4px;
+ color:var(--green);
+ font-size:8px;
+ margin-top:5px;
 }
 
 /* GRID */
 
-.grid{
-    display:grid;
-    grid-template-columns:1.4fr .8fr;
-    gap:14px;
+.mainGrid{
+ display:grid;
+ grid-template-columns:1.45fr .75fr;
+ gap:13px;
 }
 
 .card{
-    background:#0c192b;
-    border:1px solid #1b2d46;
-    border-radius:12px;
-    padding:19px;
-    margin-bottom:14px;
+ background:var(--panel);
+ border:1px solid var(--border);
+ border-radius:11px;
+ padding:18px;
+ margin-bottom:13px;
 }
 
-.cardHeader{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    margin-bottom:17px;
+.cardHead{
+ display:flex;
+ justify-content:space-between;
+ align-items:flex-start;
+ margin-bottom:16px;
 }
 
-.cardHeader h2{
-    font-size:13px;
+.cardHead h2{
+ font-size:13px;
 }
 
-.cardHeader p{
-    color:#65778f;
-    font-size:9px;
-    margin-top:4px;
-}
-
-/* TASK FORM */
-
-.form{
-    display:flex;
-    gap:7px;
-    margin-bottom:15px;
-}
-
-.form input,
-.form select{
-    height:37px;
-    border:1px solid #223651;
-    background:#091526;
-    color:#e8f0fc;
-    border-radius:7px;
-    padding:0 9px;
-    outline:0;
-    font-size:10px;
-}
-
-.form input{
-    flex:1;
-}
-
-.form select{
-    width:125px;
+.cardHead p{
+ color:var(--muted);
+ font-size:8px;
+ margin-top:4px;
 }
 
 /* TASK */
 
+.taskTools{
+ display:flex;
+ gap:7px;
+ margin-bottom:13px;
+}
+
+.taskTools input,
+.taskTools select{
+ height:35px;
+ border:1px solid var(--border);
+ background:var(--panel2);
+ color:var(--text);
+ border-radius:7px;
+ padding:0 8px;
+ outline:0;
+ font-size:9px;
+}
+
+.taskTools input{
+ flex:1;
+}
+
+.taskTools select{
+ width:110px;
+}
+
 .task{
-    padding:13px 3px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    border-bottom:1px solid #172940;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ border-bottom:1px solid var(--border);
+ padding:12px 2px;
+ gap:10px;
 }
 
 .task:last-child{
-    border-bottom:0;
+ border-bottom:0;
 }
 
-.taskInfo{
-    display:flex;
-    align-items:center;
-    gap:10px;
+.taskLeft{
+ display:flex;
+ align-items:center;
+ gap:9px;
+ min-width:0;
 }
 
 .check{
-    width:21px;
-    height:21px;
-    border:1px solid #32455f;
-    border-radius:6px;
-    background:#091526;
-    color:white;
-    display:grid;
-    place-items:center;
-    font-size:11px;
+ width:20px;
+ height:20px;
+ flex:none;
+ border:1px solid #334862;
+ background:var(--panel2);
+ color:white;
+ border-radius:6px;
+ display:grid;
+ place-items:center;
+ font-size:10px;
 }
 
 .check.done{
-    background:#18a87d;
-    border-color:#18a87d;
+ background:var(--green);
+ border-color:var(--green);
 }
 
-.taskTitle{
-    font-size:11px;
+.taskName{
+ font-size:10px;
+ white-space:nowrap;
+ overflow:hidden;
+ text-overflow:ellipsis;
+ max-width:300px;
 }
 
-.taskTitle.done{
-    text-decoration:line-through;
-    color:#586a82;
+.taskName.done{
+ text-decoration:line-through;
+ color:var(--muted);
 }
 
-.taskMeta{
-    color:#5d7089;
-    font-size:8px;
-    margin-top:4px;
+.taskSub{
+ color:var(--muted);
+ font-size:8px;
+ margin-top:4px;
+}
+
+.taskRight{
+ display:flex;
+ align-items:center;
+ gap:5px;
 }
 
 .badge{
-    font-size:8px;
-    padding:4px 7px;
-    border-radius:20px;
+ border-radius:20px;
+ padding:4px 7px;
+ font-size:7px;
 }
 
 .high{
-    color:#ff6874;
-    background:#ff687415;
+ color:var(--red);
+ background:#ff647015;
 }
 
 .medium{
-    color:#f6b04f;
-    background:#f6b04f15;
+ color:var(--orange);
+ background:#f5ad4515;
 }
 
 .low{
-    color:#29c99b;
-    background:#29c99b15;
+ color:var(--green);
+ background:#20c99715;
 }
 
 .delete{
-    background:none;
-    border:0;
-    color:#52657d;
-    font-size:14px;
-    margin-left:8px;
+ border:0;
+ background:transparent;
+ color:var(--muted);
+ font-size:14px;
 }
 
 .delete:hover{
-    color:#ff6874;
+ color:var(--red);
 }
 
 /* AI */
 
-.aiCard{
-    background:
-        linear-gradient(135deg,#171750,#101f3c);
-    border:1px solid #403b8b;
+.ai{
+ background:
+ radial-gradient(circle at 90% 10%,#7168ff38,transparent 40%),
+ linear-gradient(135deg,#111d42,#0b192b);
+ border-color:#3b3980;
 }
 
-.aiHeader{
-    display:flex;
-    align-items:center;
-    gap:10px;
+.aiTop{
+ display:flex;
+ gap:10px;
+ align-items:center;
 }
 
-.aiLogo{
-    width:38px;
-    height:38px;
-    display:grid;
-    place-items:center;
-    border-radius:11px;
-    background:linear-gradient(135deg,#746cff,#00c6ff);
+.aiIcon{
+ width:38px;
+ height:38px;
+ border-radius:11px;
+ display:grid;
+ place-items:center;
+ background:linear-gradient(135deg,var(--primary),var(--cyan));
+ box-shadow:0 10px 30px #7168ff44;
 }
 
-.aiHeader h2{
-    font-size:13px;
+.aiTop h2{
+ font-size:13px;
 }
 
-.aiHeader p{
-    color:#8394ac;
-    font-size:9px;
-    margin-top:3px;
+.aiTop p{
+ color:#8193ad;
+ font-size:8px;
+ margin-top:3px;
 }
 
-.aiResult{
-    margin-top:18px;
-    padding:14px;
-    background:#ffffff0a;
-    border:1px solid #ffffff0c;
-    border-radius:9px;
-    color:#bdc9d9;
-    font-size:10px;
-    line-height:1.7;
+.aiMessage{
+ margin-top:16px;
+ padding:13px;
+ border:1px solid #ffffff0c;
+ background:#ffffff08;
+ border-radius:9px;
+ color:#bdc9da;
+ font-size:9px;
+ line-height:1.7;
 }
 
-.progressTitle{
-    display:flex;
-    justify-content:space-between;
-    margin-top:18px;
-    margin-bottom:7px;
-    font-size:9px;
-    color:#899ab1;
+.scoreRow{
+ margin-top:15px;
+ display:flex;
+ justify-content:space-between;
+ color:#8b9cb3;
+ font-size:8px;
 }
 
 .progress{
-    height:7px;
-    background:#ffffff10;
-    border-radius:20px;
-    overflow:hidden;
+ height:7px;
+ background:#ffffff0d;
+ border-radius:20px;
+ overflow:hidden;
+ margin-top:7px;
 }
 
 .progressFill{
-    height:100%;
-    background:linear-gradient(90deg,#6c63ff,#00c6ff);
-    transition:.5s;
+ height:100%;
+ background:linear-gradient(90deg,var(--primary),var(--cyan));
+ transition:.5s;
+}
+
+/* PROJECTS */
+
+.projects{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:9px;
+}
+
+.project{
+ border:1px solid var(--border);
+ background:var(--panel2);
+ border-radius:9px;
+ padding:12px;
+}
+
+.projectTitle{
+ font-size:10px;
+ font-weight:bold;
+}
+
+.projectMeta{
+ color:var(--muted);
+ font-size:8px;
+ margin-top:4px;
+}
+
+.projectProgress{
+ margin-top:10px;
+ height:5px;
+ background:#ffffff0b;
+ border-radius:20px;
+ overflow:hidden;
+}
+
+.projectProgress div{
+ height:100%;
+ background:linear-gradient(90deg,var(--primary),var(--cyan));
+}
+
+.projectBottom{
+ display:flex;
+ justify-content:space-between;
+ margin-top:7px;
+ color:var(--muted);
+ font-size:7px;
 }
 
 /* CHART */
 
 .chart{
-    height:180px;
-    display:flex;
-    align-items:flex-end;
-    gap:13px;
-    padding:15px 10px 0;
+ height:165px;
+ display:flex;
+ align-items:flex-end;
+ gap:12px;
+ padding:10px;
 }
 
-.barWrap{
-    height:100%;
-    flex:1;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:flex-end;
-    gap:7px;
+.barBox{
+ height:100%;
+ flex:1;
+ display:flex;
+ flex-direction:column;
+ justify-content:flex-end;
+ align-items:center;
+ gap:6px;
 }
 
 .bar{
-    width:100%;
-    max-width:31px;
-    min-height:8px;
-    border-radius:7px 7px 2px 2px;
-    background:linear-gradient(to top,#5d55ed,#00c6ff);
+ width:100%;
+ max-width:28px;
+ border-radius:7px 7px 2px 2px;
+ background:linear-gradient(to top,var(--primary),var(--cyan));
+ min-height:7px;
 }
 
-.barLabel{
-    color:#53657d;
-    font-size:8px;
+.day{
+ color:var(--muted);
+ font-size:7px;
 }
 
-/* ANALYTICS */
+/* TEAM */
 
-.analytics{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:14px;
+.member{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ padding:10px 0;
+ border-bottom:1px solid var(--border);
 }
 
-.metric{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:12px 0;
-    border-bottom:1px solid #182a41;
+.member:last-child{
+ border-bottom:0;
 }
 
-.metric:last-child{
-    border-bottom:0;
+.memberLeft{
+ display:flex;
+ gap:8px;
+ align-items:center;
 }
 
-.metric span{
-    color:#7b8da5;
-    font-size:10px;
+.miniAvatar{
+ width:28px;
+ height:28px;
+ border-radius:8px;
+ background:linear-gradient(135deg,#334cff,#00a7d8);
+ display:grid;
+ place-items:center;
+ font-size:8px;
+ font-weight:bold;
 }
 
-.metric strong{
-    font-size:12px;
+.memberName{
+ font-size:9px;
+}
+
+.memberRole{
+ color:var(--muted);
+ font-size:7px;
+ margin-top:3px;
+}
+
+.load{
+ width:70px;
+}
+
+.loadBar{
+ height:5px;
+ background:#ffffff0c;
+ border-radius:20px;
+ overflow:hidden;
+}
+
+.loadBar div{
+ height:100%;
+ background:var(--green);
+}
+
+/* ACTIVITY */
+
+.activity{
+ display:flex;
+ gap:9px;
+ padding:10px 0;
+ border-bottom:1px solid var(--border);
+}
+
+.activity:last-child{
+ border-bottom:0;
+}
+
+.activityDot{
+ width:7px;
+ height:7px;
+ margin-top:4px;
+ border-radius:50%;
+ background:var(--primary);
+ box-shadow:0 0 10px var(--primary);
+ flex:none;
+}
+
+.activityText{
+ color:#91a2b9;
+ font-size:8px;
+ line-height:1.6;
+}
+
+.activityText strong{
+ color:var(--text);
+}
+
+/* COMMAND */
+
+.command{
+ position:fixed;
+ inset:0;
+ background:#0009;
+ backdrop-filter:blur(9px);
+ z-index:200;
+ display:grid;
+ place-items:center;
+ padding:20px;
+}
+
+.commandBox{
+ width:min(650px,100%);
+ background:var(--panel);
+ border:1px solid var(--border);
+ border-radius:14px;
+ box-shadow:var(--shadow);
+ overflow:hidden;
+}
+
+.commandInput{
+ width:100%;
+ height:52px;
+ border:0;
+ border-bottom:1px solid var(--border);
+ outline:0;
+ background:transparent;
+ color:var(--text);
+ padding:0 18px;
+ font-size:13px;
+}
+
+.commandHint{
+ padding:10px 18px;
+ color:var(--muted);
+ font-size:8px;
+}
+
+.commandItem{
+ padding:12px 18px;
+ border-top:1px solid var(--border);
+ font-size:9px;
+ cursor:pointer;
+}
+
+.commandItem:hover{
+ background:var(--panel2);
 }
 
 /* MODAL */
 
 .overlay{
-    position:fixed;
-    inset:0;
-    background:#000000aa;
-    backdrop-filter:blur(8px);
-    display:grid;
-    place-items:center;
-    z-index:100;
-    padding:20px;
+ position:fixed;
+ inset:0;
+ background:#0009;
+ backdrop-filter:blur(8px);
+ z-index:150;
+ display:grid;
+ place-items:center;
+ padding:20px;
 }
 
 .modal{
-    width:min(500px,100%);
-    background:#0c192b;
-    border:1px solid #293d59;
-    border-radius:15px;
-    padding:21px;
-    box-shadow:0 30px 100px #0008;
+ width:min(510px,100%);
+ background:var(--panel);
+ border:1px solid var(--border);
+ border-radius:14px;
+ padding:20px;
+ box-shadow:var(--shadow);
 }
 
 .modalHead{
-    display:flex;
-    justify-content:space-between;
-    margin-bottom:20px;
+ display:flex;
+ justify-content:space-between;
+ margin-bottom:18px;
 }
 
 .modal h2{
-    font-size:19px;
+ font-size:18px;
+ margin-top:4px;
 }
 
 .modal label{
-    color:#71839b;
-    display:block;
-    font-size:9px;
-    font-weight:bold;
-    margin-bottom:13px;
+ display:block;
+ color:var(--muted);
+ font-size:8px;
+ font-weight:bold;
+ margin-bottom:13px;
+ letter-spacing:.5px;
 }
 
 .modal input,
-.modal select{
-    width:100%;
-    height:39px;
-    margin-top:6px;
-    border:1px solid #223651;
-    background:#091526;
-    color:white;
-    border-radius:8px;
-    padding:0 9px;
-    outline:0;
-    font-size:10px;
+.modal select,
+.modal textarea{
+ display:block;
+ width:100%;
+ margin-top:6px;
+ border:1px solid var(--border);
+ background:var(--panel2);
+ color:var(--text);
+ outline:0;
+ border-radius:8px;
+ padding:9px;
+ font-size:9px;
+}
+
+.modal textarea{
+ min-height:80px;
+ resize:vertical;
 }
 
 .modalGrid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:0 12px;
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:0 10px;
 }
 
 .modalActions{
-    display:flex;
-    justify-content:flex-end;
-    gap:7px;
-    margin-top:8px;
+ display:flex;
+ justify-content:flex-end;
+ gap:7px;
 }
 
-.secondary{
-    border:1px solid #273b55;
-    background:#101f33;
-    color:#91a2ba;
-    border-radius:8px;
-    padding:10px 14px;
-    font-size:10px;
+/* KANBAN */
+
+.kanban{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:10px;
 }
 
-/* TOAST */
+.column{
+ background:var(--panel2);
+ border:1px solid var(--border);
+ border-radius:9px;
+ padding:10px;
+ min-height:180px;
+}
 
-.toast{
-    position:fixed;
-    right:25px;
-    bottom:25px;
-    background:#edf4ff;
-    color:#09111e;
-    padding:11px 15px;
-    border-radius:8px;
-    font-size:10px;
-    font-weight:bold;
-    z-index:200;
-    box-shadow:0 15px 50px #0008;
+.columnTitle{
+ display:flex;
+ justify-content:space-between;
+ color:var(--muted);
+ font-size:8px;
+ margin-bottom:9px;
+}
+
+.kanbanTask{
+ padding:10px;
+ border:1px solid var(--border);
+ border-radius:8px;
+ background:var(--panel);
+ margin-bottom:7px;
+ font-size:8px;
 }
 
 /* MOBILE */
 
-@media(max-width:900px){
-
-    .sidebar{
-        display:none;
-    }
-
-    .main{
-        margin-left:0;
-        width:100%;
-    }
-
-    .mobileMenu{
-        display:block;
-    }
-
-    .topbar{
-        padding:0 16px;
-    }
-
-    .search{
-        width:190px;
-    }
-
-    .content{
-        padding:22px 16px 50px;
-    }
-
-    .stats{
-        grid-template-columns:1fr 1fr;
-    }
-
-    .grid,
-    .analytics{
-        grid-template-columns:1fr;
-    }
+.mobileButton{
+ display:none;
 }
 
-@media(max-width:550px){
+@media(max-width:1050px){
 
-    .topbar{
-        gap:8px;
-    }
+ .stats{
+  grid-template-columns:repeat(3,1fr);
+ }
 
-    .search{
-        display:none;
-    }
+ .mainGrid{
+  grid-template-columns:1fr;
+ }
 
-    .pageHead{
-        flex-direction:column;
-        align-items:flex-start;
-        gap:15px;
-    }
+}
 
-    .pageHead .primary{
-        width:100%;
-    }
+@media(max-width:800px){
 
-    .stats{
-        grid-template-columns:1fr 1fr;
-    }
+ .sidebar{
+  display:none;
+ }
 
-    .stat{
-        padding:13px;
-    }
+ .main{
+  margin-left:0;
+ }
 
-    .statValue{
-        font-size:21px;
-    }
+ .mobileButton{
+  display:block;
+ }
 
-    .form{
-        flex-direction:column;
-    }
+ .topbar{
+  padding:0 15px;
+ }
 
-    .form select{
-        width:100%;
-    }
+ .search{
+  display:none;
+ }
 
-    .form .primary{
-        width:100%;
-    }
+ .content{
+  padding:20px 15px 50px;
+ }
 
-    .task{
-        gap:8px;
-    }
+ .pageHeader{
+  flex-direction:column;
+  align-items:flex-start;
+  gap:14px;
+ }
 
-    .badge{
-        display:none;
-    }
+ .pageHeader .primary{
+  width:100%;
+ }
 
-    .modalGrid{
-        grid-template-columns:1fr;
-    }
+ .stats{
+  grid-template-columns:1fr 1fr;
+ }
+
+ .projects,
+ .kanban{
+  grid-template-columns:1fr;
+ }
+
+}
+
+@media(max-width:500px){
+
+ .stats{
+  grid-template-columns:1fr 1fr;
+ }
+
+ .stat{
+  padding:12px;
+ }
+
+ .statValue{
+  font-size:20px;
+ }
+
+ .taskTools{
+  flex-wrap:wrap;
+ }
+
+ .taskTools input{
+  min-width:100%;
+ }
+
+ .taskTools select{
+  flex:1;
+ }
+
+ .taskName{
+  max-width:190px;
+ }
+
+ .badge{
+  display:none;
+ }
+
+ .modalGrid{
+  grid-template-columns:1fr;
+ }
+
 }
 
 </style>
@@ -788,1239 +1012,2322 @@ button{
 <script type="text/babel">
 
 const {
-    useState,
-    useEffect,
-    useMemo
-} = React;
+ useState,
+ useEffect,
+ useMemo
+}=React;
 
 
-/* ---------------- DATA ---------------- */
+/* =========================
+   INITIAL DATA
+========================= */
 
-const initialTasks = [
+const DEFAULT_TASKS=[
 
-{
-    id:1,
-    title:"Design authentication system",
-    project:"Nexus Core",
-    priority:"high",
-    completed:true
-},
+ {
+  id:1,
+  title:"Build authentication module",
+  project:"Nexus Core",
+  priority:"high",
+  completed:true,
+  status:"done"
+ },
 
-{
-    id:2,
-    title:"Build responsive dashboard",
-    project:"Nexus Core",
-    priority:"high",
-    completed:false
-},
+ {
+  id:2,
+  title:"Design analytics dashboard",
+  project:"Nexus Core",
+  priority:"high",
+  completed:false,
+  status:"progress"
+ },
 
-{
-    id:3,
-    title:"Create analytics module",
-    project:"AI Engine",
-    priority:"medium",
-    completed:false
-},
+ {
+  id:3,
+  title:"Develop AI recommendation engine",
+  project:"AI Intelligence",
+  priority:"high",
+  completed:false,
+  status:"todo"
+ },
 
-{
-    id:4,
-    title:"Optimize mobile experience",
-    project:"Nexus UI",
-    priority:"medium",
-    completed:true
-},
+ {
+  id:4,
+  title:"Optimize mobile interface",
+  project:"Nexus UI",
+  priority:"medium",
+  completed:true,
+  status:"done"
+ },
 
-{
-    id:5,
-    title:"Prepare production deployment",
-    project:"Launch",
-    priority:"low",
-    completed:false
-}
+ {
+  id:5,
+  title:"Create deployment pipeline",
+  project:"Launch",
+  priority:"medium",
+  completed:false,
+  status:"progress"
+ },
+
+ {
+  id:6,
+  title:"Prepare documentation",
+  project:"Launch",
+  priority:"low",
+  completed:false,
+  status:"todo"
+ }
 
 ];
 
 
-/* ---------------- APP ---------------- */
+const PROJECTS=[
+
+ {
+  name:"Nexus Core",
+  description:"Main platform",
+  progress:78,
+  health:"Healthy"
+ },
+
+ {
+  name:"AI Intelligence",
+  description:"Smart automation",
+  progress:54,
+  health:"At Risk"
+ },
+
+ {
+  name:"Nexus UI",
+  description:"Design system",
+  progress:91,
+  health:"Healthy"
+ },
+
+ {
+  name:"Launch",
+  description:"Production release",
+  progress:37,
+  health:"At Risk"
+ }
+
+];
+
+
+const MEMBERS=[
+
+ ["AR","Arjun Rao","Frontend Engineer",82],
+ ["SK","Sara Khan","Product Designer",64],
+ ["VM","Vikram M","Backend Engineer",91],
+ ["AN","Ananya N","Data Analyst",57]
+
+];
+
+
+/* =========================
+   APP
+========================= */
 
 function App(){
 
-    const [tasks,setTasks] =
-        useState(
-            ()=>{
-                const saved =
-                    localStorage.getItem("nexusTasks");
+ const [tasks,setTasks]=useState(
+  ()=>{
+   const saved=
+    localStorage.getItem("nexus_final_tasks");
 
-                return saved
-                    ? JSON.parse(saved)
-                    : initialTasks;
-            }
-        );
+   return saved
+    ? JSON.parse(saved)
+    : DEFAULT_TASKS;
+  }
+ );
 
-    const [search,setSearch] =
-        useState("");
+ const [page,setPage]=useState("dashboard");
 
-    const [filter,setFilter] =
-        useState("all");
+ const [search,setSearch]=useState("");
 
-    const [modal,setModal] =
-        useState(false);
+ const [filter,setFilter]=useState("all");
 
-    const [dark,setDark] =
-        useState(true);
+ const [modal,setModal]=useState(false);
 
-    const [toast,setToast] =
-        useState("");
+ const [command,setCommand]=useState(false);
 
-    useEffect(
-        ()=>{
-            localStorage.setItem(
-                "nexusTasks",
-                JSON.stringify(tasks)
-            );
-        },
-        [tasks]
-    );
+ const [dark,setDark]=useState(
+  localStorage.getItem("nexus_theme")!=="light"
+ );
 
+ const [toast,setToast]=useState("");
 
-    const total = tasks.length;
+ useEffect(
+  ()=>{
+   localStorage.setItem(
+    "nexus_final_tasks",
+    JSON.stringify(tasks)
+   );
+  },
+  [tasks]
+ );
 
-    const completed =
-        tasks.filter(
-            t=>t.completed
-        ).length;
+ useEffect(
+  ()=>{
+   document.body.className=
+    dark ? "" : "light";
 
-    const pending =
-        total-completed;
-
-    const productivity =
-        total
-        ? Math.round(
-            completed/total*100
-        )
-        : 0;
+   localStorage.setItem(
+    "nexus_theme",
+    dark ? "dark" : "light"
+   );
+  },
+  [dark]
+ );
 
 
-    const filteredTasks =
-        useMemo(
-            ()=>{
+ useEffect(
+  ()=>{
 
-                return tasks.filter(task=>{
+   const handler=e=>{
 
-                    const text =
-                        task.title.toLowerCase();
+    if(
+     (e.ctrlKey || e.metaKey) &&
+     e.key.toLowerCase()==="k"
+    ){
 
-                    const matchSearch =
-                        text.includes(
-                            search.toLowerCase()
-                        );
-
-                    const matchFilter =
-                        filter==="all"
-                        ||
-                        filter===task.priority
-                        ||
-                        (filter==="completed" &&
-                         task.completed)
-                        ||
-                        (filter==="pending" &&
-                         !task.completed);
-
-                    return (
-                        matchSearch &&
-                        matchFilter
-                    );
-
-                });
-
-            },
-            [tasks,search,filter]
-        );
-
-
-    function notify(message){
-
-        setToast(message);
-
-        setTimeout(
-            ()=>setToast(""),
-            2200
-        );
+     e.preventDefault();
+     setCommand(true);
 
     }
 
+    if(e.key==="Escape"){
 
-    function addTask(title,priority){
-
-        if(!title.trim()){
-
-            notify("Enter a task name");
-
-            return;
-        }
-
-        const task = {
-
-            id:Date.now(),
-
-            title:title.trim(),
-
-            project:"Nexus Core",
-
-            priority,
-
-            completed:false
-
-        };
-
-        setTasks(
-            [task,...tasks]
-        );
-
-        setModal(false);
-
-        notify("Task created successfully");
+     setCommand(false);
+     setModal(false);
 
     }
 
+   };
 
-    function toggleTask(id){
+   window.addEventListener(
+    "keydown",
+    handler
+   );
 
-        setTasks(
-            tasks.map(
-                task=>
-                    task.id===id
-                    ? {
-                        ...task,
-                        completed:
-                            !task.completed
-                    }
-                    : task
-            )
-        );
+   return ()=>window.removeEventListener(
+    "keydown",
+    handler
+   );
 
-        notify("Task status updated");
-
-    }
+  },
+  []
+ );
 
 
-    function deleteTask(id){
+ const total=tasks.length;
 
-        setTasks(
-            tasks.filter(
-                task=>task.id!==id
-            )
-        );
+ const completed=
+  tasks.filter(t=>t.completed).length;
 
-        notify("Task deleted");
+ const pending=total-completed;
 
-    }
+ const high=
+  tasks.filter(
+   t=>t.priority==="high" &&
+   !t.completed
+  ).length;
 
-
-    function clearCompleted(){
-
-        setTasks(
-            tasks.filter(
-                task=>!task.completed
-            )
-        );
-
-        notify("Completed tasks cleared");
-
-    }
+ const productivity=
+  total
+   ? Math.round(completed/total*100)
+   :0;
 
 
-    return (
+ const filtered=
+  useMemo(
+   ()=>tasks.filter(task=>{
 
-        <div className="app">
+    const matchesSearch=
+     task.title
+      .toLowerCase()
+      .includes(search.toLowerCase());
 
-            <Sidebar
-                filter={filter}
-                setFilter={setFilter}
-            />
+    const matchesFilter=
+     filter==="all"
+     ||
+     filter===task.priority
+     ||
+     filter==="completed" &&
+     task.completed
+     ||
+     filter==="pending" &&
+     !task.completed;
 
+    return matchesSearch && matchesFilter;
 
-            <main className="main">
-
-                <Topbar
-                    search={search}
-                    setSearch={setSearch}
-                    dark={dark}
-                    setDark={setDark}
-                />
-
-
-                <section className="content">
-
-                    <header className="pageHead">
-
-                        <div>
-
-                            <div className="eyebrow">
-                                AI PRODUCTIVITY PLATFORM
-                            </div>
-
-                            <h1>
-                                Welcome back,{" "}
-                                <span>Pranith.</span>
-                            </h1>
-
-                            <p>
-                                Manage projects, track progress
-                                and work smarter with AI insights.
-                            </p>
-
-                        </div>
-
-                        <button
-                            className="primary"
-                            onClick={()=>setModal(true)}
-                        >
-                            + Create New Task
-                        </button>
-
-                    </header>
+   }),
+   [tasks,search,filter]
+ );
 
 
-                    <Stats
-                        total={total}
-                        completed={completed}
-                        pending={pending}
-                        productivity={productivity}
-                    />
+ function notify(text){
+
+  setToast(text);
+
+  setTimeout(
+   ()=>setToast(""),
+   2300
+  );
+
+ }
 
 
-                    <div className="grid">
+ function addTask(title,priority,project){
 
-                        <div>
+  if(!title.trim()){
 
-                            <TaskCard
-                                tasks={filteredTasks}
-                                search={search}
-                                setSearch={setSearch}
-                                filter={filter}
-                                setFilter={setFilter}
-                                toggleTask={toggleTask}
-                                deleteTask={deleteTask}
-                                clearCompleted={clearCompleted}
-                                openModal={()=>setModal(true)}
-                            />
+   notify("Enter a task name");
 
+   return;
 
-                            <WeeklyChart />
+  }
 
-                        </div>
+  const task={
 
+   id:Date.now(),
 
-                        <div>
+   title:title.trim(),
 
-                            <AIPanel
-                                productivity={productivity}
-                                pending={pending}
-                            />
+   project,
 
+   priority,
 
-                            <Analytics
-                                tasks={tasks}
-                                completed={completed}
-                                pending={pending}
-                            />
+   completed:false,
 
-                        </div>
+   status:"todo"
 
-                    </div>
+  };
 
-                </section>
+  setTasks(
+   [task,...tasks]
+  );
 
-            </main>
+  setModal(false);
+
+  notify("Task created successfully");
+
+ }
 
 
-            {modal &&
-                <TaskModal
-                    onClose={()=>setModal(false)}
-                    onAdd={addTask}
-                />
-            }
+ function toggleTask(id){
+
+  setTasks(
+   tasks.map(task=>
+    task.id===id
+     ? {
+       ...task,
+       completed:!task.completed,
+       status:
+        !task.completed
+         ?"done"
+         :"todo"
+       }
+     :task
+   )
+  );
+
+  notify("Task status updated");
+
+ }
 
 
-            {toast &&
-                <div className="toast">
-                    ✓ {toast}
-                </div>
-            }
+ function deleteTask(id){
 
-        </div>
+  setTasks(
+   tasks.filter(
+    task=>task.id!==id
+   )
+  );
 
-    );
+  notify("Task removed");
+
+ }
+
+
+ function commandAction(action){
+
+  setCommand(false);
+
+  if(action==="task"){
+
+   setModal(true);
+
+  }
+
+  if(action==="completed"){
+
+   setFilter("completed");
+   setPage("dashboard");
+
+  }
+
+  if(action==="analytics"){
+
+   setPage("analytics");
+
+  }
+
+  if(action==="kanban"){
+
+   setPage("kanban");
+
+  }
+
+ }
+
+
+ function exportCSV(){
+
+  const rows=[
+   ["Task","Project","Priority","Completed"]
+  ];
+
+  tasks.forEach(t=>
+   rows.push([
+    t.title,
+    t.project,
+    t.priority,
+    t.completed
+     ?"Yes"
+     :"No"
+   ])
+  );
+
+  const csv=
+   rows
+    .map(row=>
+     row.map(
+      value=>
+       `"${String(value).replaceAll('"','""')}"`
+     ).join(",")
+    )
+    .join("\n");
+
+  const blob=
+   new Blob([csv],{
+    type:"text/csv"
+   });
+
+  const url=
+   URL.createObjectURL(blob);
+
+  const a=
+   document.createElement("a");
+
+  a.href=url;
+  a.download="nexus-tasks.csv";
+  a.click();
+
+  URL.revokeObjectURL(url);
+
+  notify("CSV report exported");
+
+ }
+
+
+ return(
+
+  <div className="app">
+
+   <Sidebar
+    page={page}
+    setPage={setPage}
+    setFilter={setFilter}
+   />
+
+
+   <main className="main">
+
+    <Topbar
+     search={search}
+     setSearch={setSearch}
+     dark={dark}
+     setDark={setDark}
+     openCommand={()=>setCommand(true)}
+    />
+
+
+    <section className="content">
+
+     <PageHeader
+      page={page}
+      openModal={()=>setModal(true)}
+      exportCSV={exportCSV}
+     />
+
+
+     <Stats
+      total={total}
+      completed={completed}
+      pending={pending}
+      high={high}
+      productivity={productivity}
+     />
+
+
+     {page==="dashboard" &&
+
+      <Dashboard
+       tasks={filtered}
+       search={search}
+       setSearch={setSearch}
+       filter={filter}
+       setFilter={setFilter}
+       toggleTask={toggleTask}
+       deleteTask={deleteTask}
+       productivity={productivity}
+       pending={pending}
+       completed={completed}
+       openModal={()=>setModal(true)}
+      />
+
+     }
+
+
+     {page==="projects" &&
+
+      <Projects/>
+
+     }
+
+
+     {page==="kanban" &&
+
+      <Kanban
+       tasks={tasks}
+      />
+
+     }
+
+
+     {page==="team" &&
+
+      <Team/>
+
+     }
+
+
+     {page==="analytics" &&
+
+      <Analytics
+       tasks={tasks}
+       productivity={productivity}
+      />
+
+     }
+
+    </section>
+
+   </main>
+
+
+   {modal &&
+
+    <TaskModal
+     onClose={()=>setModal(false)}
+     onAdd={addTask}
+    />
+
+   }
+
+
+   {command &&
+
+    <CommandPalette
+     close={()=>setCommand(false)}
+     action={commandAction}
+    />
+
+   }
+
+
+   {toast &&
+
+    <div className="toast">
+     ✓ {toast}
+    </div>
+
+   }
+
+  </div>
+
+ );
 
 }
 
 
-/* ---------------- SIDEBAR ---------------- */
+/* =========================
+ SIDEBAR
+========================= */
 
-function Sidebar({filter,setFilter}){
+function Sidebar({
+ page,
+ setPage,
+ setFilter
+}){
 
-    return (
+ function go(name){
 
-        <aside className="sidebar">
+  setPage(name);
 
-            <div className="logo">
+  if(name==="dashboard")
+   setFilter("all");
 
-                <div className="logoIcon">
-                    ◈
-                </div>
-
-                <div className="logoText">
-
-                    <strong>NEXUS</strong>
-
-                    <span>
-                        AI WORKSPACE
-                    </span>
-
-                </div>
-
-            </div>
+ }
 
 
-            <div className="sectionTitle">
-                WORKSPACE
-            </div>
+ return(
+
+  <aside className="sidebar">
+
+   <div className="logo">
+
+    <div className="logoMark">
+     ◈
+    </div>
+
+    <div>
+     <strong>NEXUS</strong>
+     <small> AI OPERATIONS</small>
+    </div>
+
+   </div>
 
 
-            <button
-                className={
-                    filter==="all"
-                    ? "nav active"
-                    : "nav"
-                }
-                onClick={()=>setFilter("all")}
-            >
-                ◉ Dashboard
-            </button>
+   <div className="navTitle">
+    WORKSPACE
+   </div>
 
 
-            <button
-                className="nav"
-                onClick={()=>setFilter("pending")}
-            >
-                □ Active Tasks
-            </button>
+   <button
+    className={
+     page==="dashboard"
+      ?"nav active"
+      :"nav"
+    }
+    onClick={()=>go("dashboard")}
+   >
+    ◉ Dashboard
+   </button>
 
 
-            <button
-                className="nav"
-                onClick={()=>setFilter("completed")}
-            >
-                ✓ Completed
-            </button>
+   <button
+    className={
+     page==="projects"
+      ?"nav active"
+      :"nav"
+    }
+    onClick={()=>go("projects")}
+   >
+    ▣ Projects
+   </button>
 
 
-            <div className="sectionTitle">
-                INTELLIGENCE
-            </div>
+   <button
+    className={
+     page==="kanban"
+      ?"nav active"
+      :"nav"
+    }
+    onClick={()=>go("kanban")}
+   >
+    ▤ Kanban Board
+   </button>
 
 
-            <button className="nav">
-                ◇ AI Insights
-            </button>
-
-            <button className="nav">
-                ◫ Analytics
-            </button>
+   <div className="navTitle">
+    INTELLIGENCE
+   </div>
 
 
-            <div className="sectionTitle">
-                SYSTEM
-            </div>
+   <button
+    className="nav"
+    onClick={()=>go("analytics")}
+   >
+    ◫ Analytics
+   </button>
 
 
-            <button className="nav">
-                ⚙ Settings
-            </button>
+   <button className="nav">
+    ✦ AI Assistant
+   </button>
 
 
-            <div className="sidebarBottom">
+   <div className="navTitle">
+    ORGANIZATION
+   </div>
 
-                <div className="profile">
 
-                    <div className="avatar">
-                        P
-                    </div>
+   <button
+    className={
+     page==="team"
+      ?"nav active"
+      :"nav"
+    }
+    onClick={()=>go("team")}
+   >
+    ◎ Team
+   </button>
 
-                    <div className="profileText">
 
-                        <strong>
-                            Pranith
-                        </strong>
+   <button className="nav">
+    ⚙ Settings
+   </button>
 
-                        <small>
-                            Developer
-                        </small>
 
-                    </div>
+   <div className="sidebarFooter">
 
-                </div>
+    <div className="avatar">
+     P
+    </div>
 
-            </div>
+    <div>
 
-        </aside>
+     <div className="userName">
+      Pranith
+     </div>
 
-    );
+     <div className="userRole">
+      Project Administrator
+     </div>
+
+    </div>
+
+   </div>
+
+  </aside>
+
+ );
 
 }
 
 
-/* ---------------- TOPBAR ---------------- */
+/* =========================
+ TOPBAR
+========================= */
 
 function Topbar({
-    search,
-    setSearch,
-    dark,
-    setDark
+ search,
+ setSearch,
+ dark,
+ setDark,
+ openCommand
 }){
 
-    return (
+ return(
 
-        <header className="topbar">
+  <header className="topbar">
 
-            <button className="iconButton mobileMenu">
-                ☰
-            </button>
-
-
-            <div className="search">
-
-                🔎
-
-                <input
-                    value={search}
-                    onChange={
-                        e=>setSearch(e.target.value)
-                    }
-                    placeholder="Search tasks..."
-                />
-
-            </div>
+   <button
+    className="icon mobileButton"
+   >
+    ☰
+   </button>
 
 
-            <div className="actions">
+   <div className="search">
 
-                <button
-                    className="iconButton"
-                    onClick={
-                        ()=>{
-                            document.body.style.filter =
-                            document.body.style.filter
-                            ? ""
-                            : "brightness(.85)"
-                        }
-                    }
-                >
-                    ◐
-                </button>
+    🔎
 
+    <input
+     value={search}
+     onChange={
+      e=>setSearch(e.target.value)
+     }
+     placeholder="Search anything..."
+    />
 
-                <button className="iconButton">
-                    🔔
-                </button>
+    <small>
+     Ctrl K
+    </small>
+
+   </div>
 
 
-                <div className="avatar">
-                    P
-                </div>
+   <div className="topActions">
 
-            </div>
+    <button
+     className="icon"
+     onClick={openCommand}
+     title="Command palette"
+    >
+     ⌘
+    </button>
 
-        </header>
 
-    );
+    <button
+     className="icon"
+     onClick={
+      ()=>setDark(!dark)
+     }
+    >
+     {dark?"☀":"🌙"}
+    </button>
+
+
+    <button className="icon">
+     🔔
+    </button>
+
+
+    <div className="avatar">
+     P
+    </div>
+
+   </div>
+
+  </header>
+
+ );
 
 }
 
 
-/* ---------------- STATS ---------------- */
+/* =========================
+ PAGE HEADER
+========================= */
+
+function PageHeader({
+ page,
+ openModal,
+ exportCSV
+}){
+
+ const titles={
+  dashboard:"Executive Dashboard",
+  projects:"Project Portfolio",
+  kanban:"Kanban Command Board",
+  team:"Team Operations",
+  analytics:"Advanced Analytics"
+ };
+
+ return(
+
+  <div className="pageHeader">
+
+   <div>
+
+    <div className="eyebrow">
+     NEXUS AI / CONTROL CENTER
+    </div>
+
+    <h1>
+     {titles[page]} <span className="gradient">.</span>
+    </h1>
+
+    <p>
+     Intelligent project operations and
+     productivity management.
+    </p>
+
+   </div>
+
+
+   <div style={{
+    display:"flex",
+    gap:"7px"
+   }}>
+
+    <button
+     className="secondary"
+     onClick={exportCSV}
+    >
+     ↓ Export
+    </button>
+
+    <button
+     className="primary"
+     onClick={openModal}
+    >
+     + New Task
+    </button>
+
+   </div>
+
+  </div>
+
+ );
+
+}
+
+
+/* =========================
+ STATS
+========================= */
 
 function Stats({
-    total,
-    completed,
-    pending,
-    productivity
+ total,
+ completed,
+ pending,
+ high,
+ productivity
 }){
 
-    const data=[
+ const data=[
 
-        ["TOTAL TASKS",total,"↑ Workspace items","▣"],
+  ["TASKS",total,"Workspace","▣"],
 
-        ["COMPLETED",completed,"↑ Delivery progress","✓"],
+  ["COMPLETED",completed,"Delivered","✓"],
 
-        ["PENDING",pending,"Needs attention","◷"],
+  ["PENDING",pending,"In progress","◷"],
 
-        ["PRODUCTIVITY",productivity+"%","AI efficiency score","⚡"]
+  ["HIGH PRIORITY",high,"Attention","!"],
 
-    ];
+  ["EFFICIENCY",productivity+"%","AI score","⚡"]
+
+ ];
 
 
-    return (
+ return(
 
-        <div className="stats">
+  <div className="stats">
 
-            {data.map(
-                ([label,value,meta,icon])=>
+   {data.map(
+    ([name,value,meta,icon])=>
 
-                <div
-                    className="stat"
-                    key={label}
-                >
+    <div
+     className="stat"
+     key={name}
+    >
 
-                    <div className="statTop">
+     <div className="statTop">
 
-                        <span className="statLabel">
-                            {label}
-                        </span>
+      <span>{name}</span>
 
-                        <span className="statIcon">
-                            {icon}
-                        </span>
+      <span className="statIcon">
+       {icon}
+      </span>
 
-                    </div>
+     </div>
 
-                    <div className="statValue">
-                        {value}
-                    </div>
+     <div className="statValue">
+      {value}
+     </div>
 
-                    <div className="statMeta">
-                        {meta}
-                    </div>
+     <div className="statMeta">
+      ↑ {meta}
+     </div>
 
-                </div>
+    </div>
 
-            )}
+   )}
 
-        </div>
+  </div>
 
-    );
+ );
 
 }
 
 
-/* ---------------- TASK CARD ---------------- */
+/* =========================
+ DASHBOARD
+========================= */
+
+function Dashboard({
+ tasks,
+ search,
+ setSearch,
+ filter,
+ setFilter,
+ toggleTask,
+ deleteTask,
+ productivity,
+ pending,
+ completed,
+ openModal
+}){
+
+ return(
+
+  <div className="mainGrid">
+
+   <div>
+
+    <TaskCard
+     tasks={tasks}
+     search={search}
+     setSearch={setSearch}
+     filter={filter}
+     setFilter={setFilter}
+     toggleTask={toggleTask}
+     deleteTask={deleteTask}
+     openModal={openModal}
+    />
+
+
+    <WeeklyChart/>
+
+    <ProjectSnapshot/>
+
+   </div>
+
+
+   <div>
+
+    <AIPanel
+     productivity={productivity}
+     pending={pending}
+    />
+
+
+    <Activity/>
+
+
+    <QuickMetrics
+     completed={completed}
+     pending={pending}
+    />
+
+   </div>
+
+  </div>
+
+ );
+
+}
+
+
+/* =========================
+ TASK CARD
+========================= */
 
 function TaskCard({
-    tasks,
-    search,
-    setSearch,
-    filter,
-    setFilter,
-    toggleTask,
-    deleteTask,
-    clearCompleted,
-    openModal
+ tasks,
+ search,
+ setSearch,
+ filter,
+ setFilter,
+ toggleTask,
+ deleteTask,
+ openModal
 }){
 
-    return (
+ return(
 
-        <div className="card">
+  <div className="card">
 
-            <div className="cardHeader">
+   <div className="cardHead">
 
-                <div>
+    <div>
 
-                    <h2>
-                        Project Tasks
-                    </h2>
+     <h2>
+      Active Workload
+     </h2>
 
-                    <p>
-                        Manage your current workload
-                    </p>
+     <p>
+      Track and control project execution
+     </p>
 
-                </div>
+    </div>
 
-                <button
-                    className="secondary"
-                    onClick={clearCompleted}
-                >
-                    Clear completed
-                </button>
+    <button
+     className="secondary"
+     onClick={openModal}
+    >
+     Add
+    </button>
 
-            </div>
-
-
-            <div className="form">
-
-                <input
-                    value={search}
-                    onChange={
-                        e=>setSearch(e.target.value)
-                    }
-                    placeholder="Search tasks..."
-                />
+   </div>
 
 
-                <select
-                    value={filter}
-                    onChange={
-                        e=>setFilter(e.target.value)
-                    }
-                >
+   <div className="taskTools">
 
-                    <option value="all">
-                        All
-                    </option>
-
-                    <option value="high">
-                        High
-                    </option>
-
-                    <option value="medium">
-                        Medium
-                    </option>
-
-                    <option value="low">
-                        Low
-                    </option>
-
-                    <option value="completed">
-                        Completed
-                    </option>
-
-                    <option value="pending">
-                        Pending
-                    </option>
-
-                </select>
+    <input
+     value={search}
+     onChange={
+      e=>setSearch(e.target.value)
+     }
+     placeholder="Search tasks..."
+    />
 
 
-                <button
-                    className="primary"
-                    onClick={openModal}
-                >
-                    +
-                </button>
+    <select
+     value={filter}
+     onChange={
+      e=>setFilter(e.target.value)
+     }
+    >
 
-            </div>
+     <option value="all">
+      All
+     </option>
 
+     <option value="high">
+      High
+     </option>
 
-            {tasks.length===0 ?
+     <option value="medium">
+      Medium
+     </option>
 
-                <div
-                    style={{
-                        textAlign:"center",
-                        padding:"35px",
-                        color:"#60738c",
-                        fontSize:"11px"
-                    }}
-                >
-                    No tasks found.
-                </div>
+     <option value="low">
+      Low
+     </option>
 
-                :
+     <option value="completed">
+      Completed
+     </option>
 
-                tasks.map(task=>
+     <option value="pending">
+      Pending
+     </option>
 
-                    <div
-                        className="task"
-                        key={task.id}
-                    >
+    </select>
 
-                        <div className="taskInfo">
-
-                            <button
-                                className={
-                                    task.completed
-                                    ? "check done"
-                                    : "check"
-                                }
-                                onClick={
-                                    ()=>toggleTask(task.id)
-                                }
-                            >
-                                {task.completed ? "✓" : ""}
-                            </button>
+   </div>
 
 
-                            <div>
+   {tasks.length===0 ?
 
-                                <div
-                                    className={
-                                        task.completed
-                                        ? "taskTitle done"
-                                        : "taskTitle"
-                                    }
-                                >
-                                    {task.title}
-                                </div>
+    <div style={{
+     padding:"35px",
+     textAlign:"center",
+     color:"var(--muted)",
+     fontSize:"9px"
+    }}>
+     No matching tasks found.
+    </div>
 
-                                <div className="taskMeta">
-                                    {task.project}
-                                </div>
+    :
 
-                            </div>
+    tasks.map(task=>
 
-                        </div>
+     <div
+      className="task"
+      key={task.id}
+     >
+
+      <div className="taskLeft">
+
+       <button
+        className={
+         task.completed
+          ?"check done"
+          :"check"
+        }
+        onClick={
+         ()=>toggleTask(task.id)
+        }
+       >
+        {task.completed?"✓":""}
+       </button>
 
 
-                        <div>
+       <div>
 
-                            <span
-                                className={
-                                    "badge "+task.priority
-                                }
-                            >
-                                {task.priority}
-                            </span>
-
-
-                            <button
-                                className="delete"
-                                onClick={
-                                    ()=>deleteTask(task.id)
-                                }
-                            >
-                                ×
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                )
-
-            }
-
+        <div
+         className={
+          task.completed
+           ?"taskName done"
+           :"taskName"
+         }
+        >
+         {task.title}
         </div>
 
-    );
+        <div className="taskSub">
+         {task.project} · {task.status}
+        </div>
+
+       </div>
+
+      </div>
+
+
+      <div className="taskRight">
+
+       <span
+        className={
+         "badge "+task.priority
+        }
+       >
+        {task.priority}
+       </span>
+
+       <button
+        className="delete"
+        onClick={
+         ()=>deleteTask(task.id)
+        }
+       >
+        ×
+       </button>
+
+      </div>
+
+     </div>
+
+    )
+
+   }
+
+  </div>
+
+ );
 
 }
 
 
-/* ---------------- AI ---------------- */
+/* =========================
+ AI PANEL
+========================= */
 
 function AIPanel({
-    productivity,
-    pending
+ productivity,
+ pending
 }){
 
-    let message;
+ let message;
 
-    if(productivity>=80){
+ if(productivity>=80){
 
-        message =
-        "Excellent productivity. Your completion rate is strong. Consider moving high-priority work into the next sprint.";
+  message=
+   "Excellent execution detected. Your completion rate is strong. Consider increasing strategic work while maintaining the current delivery rhythm.";
 
-    }
-    else if(productivity>=50){
+ }
+ else if(productivity>=50){
 
-        message =
-        "Good momentum detected. Focus on the remaining high-priority tasks to increase your delivery efficiency.";
+  message=
+   "Healthy progress detected. Prioritize high-impact pending tasks and reduce context switching to improve your delivery score.";
 
-    }
-    else{
+ }
+ else{
 
-        message =
-        "Several tasks are still pending. Start with one high-priority task and break complex work into smaller steps.";
+  message=
+   "Your workload contains unfinished items. Start with the highest-priority task and divide complex work into smaller milestones.";
 
-    }
-
-
-    return (
-
-        <div className="card aiCard">
-
-            <div className="aiHeader">
-
-                <div className="aiLogo">
-                    ✦
-                </div>
-
-                <div>
-
-                    <h2>
-                        NEXUS AI
-                    </h2>
-
-                    <p>
-                        Intelligent productivity analysis
-                    </p>
-
-                </div>
-
-            </div>
+ }
 
 
-            <div className="aiResult">
+ return(
 
-                <strong>
-                    AI Recommendation
-                </strong>
+  <div className="card ai">
 
-                <br/>
+   <div className="aiTop">
 
-                {message}
+    <div className="aiIcon">
+     ✦
+    </div>
 
-                <br/><br/>
+    <div>
 
-                Pending workload:
-                <strong>
-                    {" "+pending}
-                </strong>
+     <h2>
+      NEXUS AI
+     </h2>
 
-            </div>
+     <p>
+      Intelligent work analysis
+     </p>
 
+    </div>
 
-            <div className="progressTitle">
-
-                <span>
-                    PRODUCTIVITY SCORE
-                </span>
-
-                <strong>
-                    {productivity}%
-                </strong>
-
-            </div>
+   </div>
 
 
-            <div className="progress">
+   <div className="aiMessage">
 
-                <div
-                    className="progressFill"
-                    style={{
-                        width:productivity+"%"
-                    }}
-                />
+    <strong>
+     AI INSIGHT
+    </strong>
 
-            </div>
+    <br/><br/>
 
-        </div>
+    {message}
 
-    );
+    <br/><br/>
+
+    Current pending workload:
+    <strong>
+     {" "+pending}
+    </strong>
+
+   </div>
+
+
+   <div className="scoreRow">
+
+    <span>
+     PRODUCTIVITY SCORE
+    </span>
+
+    <strong>
+     {productivity}%
+    </strong>
+
+   </div>
+
+
+   <div className="progress">
+
+    <div
+     className="progressFill"
+     style={{
+      width:productivity+"%"
+     }}
+    />
+
+   </div>
+
+  </div>
+
+ );
 
 }
 
 
-/* ---------------- CHART ---------------- */
+/* =========================
+ WEEKLY CHART
+========================= */
 
 function WeeklyChart(){
 
-    const values=[
-        45,68,52,83,65,91,76
-    ];
+ const values=[
+  42,61,52,76,68,94,81
+ ];
 
-    const days=[
-        "M","T","W","T","F","S","S"
-    ];
+ const days=[
+  "MON","TUE","WED",
+  "THU","FRI","SAT","SUN"
+ ];
 
-    return (
+ return(
 
-        <div className="card">
+  <div className="card">
 
-            <div className="cardHeader">
+   <div className="cardHead">
 
-                <div>
+    <div>
 
-                    <h2>
-                        Weekly Performance
-                    </h2>
+     <h2>
+      Productivity Intelligence
+     </h2>
 
-                    <p>
-                        Productivity activity
-                    </p>
+     <p>
+      Weekly execution activity
+     </p>
 
-                </div>
+    </div>
 
-            </div>
+    <span className="badge low">
+     LIVE
+    </span>
 
-
-            <div className="chart">
-
-                {values.map(
-                    (value,i)=>
-
-                    <div
-                        className="barWrap"
-                        key={i}
-                    >
-
-                        <div
-                            className="bar"
-                            style={{
-                                height:value+"%"
-                            }}
-                        />
-
-                        <span className="barLabel">
-                            {days[i]}
-                        </span>
-
-                    </div>
-
-                )}
-
-            </div>
-
-        </div>
-
-    );
-
-}
+   </div>
 
 
-/* ---------------- ANALYTICS ---------------- */
+   <div className="chart">
 
-function Analytics({
-    tasks,
-    completed,
-    pending
-}){
+    {values.map(
+     (value,i)=>
 
-    const high =
-        tasks.filter(
-            t=>t.priority==="high"
-        ).length;
+     <div
+      className="barBox"
+      key={i}
+     >
 
-    const projects =
-        new Set(
-            tasks.map(t=>t.project)
-        ).size;
+      <div
+       className="bar"
+       style={{
+        height:value+"%"
+       }}
+      />
 
+      <span className="day">
+       {days[i]}
+      </span>
 
-    return (
+     </div>
 
-        <div className="card">
+    )}
 
-            <div className="cardHeader">
+   </div>
 
-                <div>
+  </div>
 
-                    <h2>
-                        Workspace Analytics
-                    </h2>
-
-                    <p>
-                        Live project metrics
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div className="metric">
-
-                <span>
-                    Active Projects
-                </span>
-
-                <strong>
-                    {projects}
-                </strong>
-
-            </div>
-
-
-            <div className="metric">
-
-                <span>
-                    High Priority
-                </span>
-
-                <strong>
-                    {high}
-                </strong>
-
-            </div>
-
-
-            <div className="metric">
-
-                <span>
-                    Completed
-                </span>
-
-                <strong>
-                    {completed}
-                </strong>
-
-            </div>
-
-
-            <div className="metric">
-
-                <span>
-                    Remaining
-                </span>
-
-                <strong>
-                    {pending}
-                </strong>
-
-            </div>
-
-        </div>
-
-    );
+ );
 
 }
 
 
-/* ---------------- MODAL ---------------- */
+/* =========================
+ PROJECT SNAPSHOT
+========================= */
 
-function TaskModal({
-    onClose,
-    onAdd
+function ProjectSnapshot(){
+
+ return(
+
+  <div className="card">
+
+   <div className="cardHead">
+
+    <div>
+
+     <h2>
+      Project Health
+     </h2>
+
+     <p>
+      Portfolio overview
+     </p>
+
+    </div>
+
+   </div>
+
+
+   <div className="projects">
+
+    {PROJECTS.map(
+     project=>
+
+     <div
+      className="project"
+      key={project.name}
+     >
+
+      <div className="projectTitle">
+       {project.name}
+      </div>
+
+      <div className="projectMeta">
+       {project.description}
+      </div>
+
+      <div className="projectProgress">
+
+       <div
+        style={{
+         width:project.progress+"%"
+        }}
+       />
+
+      </div>
+
+      <div className="projectBottom">
+
+       <span>
+        {project.progress}% complete
+       </span>
+
+       <span>
+        {project.health}
+       </span>
+
+      </div>
+
+     </div>
+
+    )}
+
+   </div>
+
+  </div>
+
+ );
+
+}
+
+
+/* =========================
+ ACTIVITY
+========================= */
+
+function Activity(){
+
+ const items=[
+
+  ["You","completed authentication module"],
+
+  ["AI Engine","detected a project risk"],
+
+  ["Sara","updated design milestone"],
+
+  ["System","generated weekly report"]
+
+ ];
+
+
+ return(
+
+  <div className="card">
+
+   <div className="cardHead">
+
+    <div>
+
+     <h2>
+      Activity Stream
+     </h2>
+
+     <p>
+      Latest workspace events
+     </p>
+
+    </div>
+
+   </div>
+
+
+   {items.map(
+    ([who,text],i)=>
+
+    <div
+     className="activity"
+     key={i}
+    >
+
+     <div className="activityDot"/>
+
+     <div className="activityText">
+
+      <strong>
+       {who}
+      </strong>{" "}
+      {text}
+
+     </div>
+
+    </div>
+
+   )}
+
+  </div>
+
+ );
+
+}
+
+
+/* =========================
+ QUICK METRICS
+========================= */
+
+function QuickMetrics({
+ completed,
+ pending
 }){
 
-    const [title,setTitle] =
-        useState("");
+ return(
 
-    const [priority,setPriority] =
-        useState("medium");
+  <div className="card">
+
+   <div className="cardHead">
+
+    <div>
+
+     <h2>
+      Delivery Metrics
+     </h2>
+
+     <p>
+      Current sprint indicators
+     </p>
+
+    </div>
+
+   </div>
 
 
-    function submit(e){
+   <Metric
+    label="Completed"
+    value={completed}
+   />
 
-        e.preventDefault();
+   <Metric
+    label="Pending"
+    value={pending}
+   />
 
-        onAdd(
-            title,
-            priority
-        );
+   <Metric
+    label="Sprint health"
+    value="92%"
+   />
+
+   <Metric
+    label="Risk level"
+    value="Low"
+   />
+
+  </div>
+
+ );
+
+}
+
+
+function Metric({
+ label,
+ value
+}){
+
+ return(
+
+  <div className="metric"
+   style={{
+    display:"flex",
+    justifyContent:"space-between",
+    padding:"10px 0",
+    borderBottom:"1px solid var(--border)",
+    fontSize:"9px"
+   }}
+  >
+
+   <span style={{
+    color:"var(--muted)"
+   }}>
+    {label}
+   </span>
+
+   <strong>
+    {value}
+   </strong>
+
+  </div>
+
+ );
+
+}
+
+
+/* =========================
+ PROJECT PAGE
+========================= */
+
+function Projects(){
+
+ return(
+
+  <div className="card">
+
+   <div className="cardHead">
+
+    <div>
+
+     <h2>
+      Project Portfolio
+     </h2>
+
+     <p>
+      Multi-project operational overview
+     </p>
+
+    </div>
+
+   </div>
+
+
+   <div className="projects">
+
+    {PROJECTS.map(
+     project=>
+
+     <div
+      className="project"
+      key={project.name}
+     >
+
+      <div className="projectTitle">
+       {project.name}
+      </div>
+
+      <div className="projectMeta">
+       {project.description}
+      </div>
+
+      <div style={{
+       marginTop:"13px",
+       fontSize:"20px",
+       fontWeight:"bold"
+      }}>
+       {project.progress}%
+      </div>
+
+      <div className="projectProgress">
+
+       <div
+        style={{
+         width:project.progress+"%"
+        }}
+       />
+
+      </div>
+
+      <div className="projectBottom">
+
+       <span>
+        Project completion
+       </span>
+
+       <span>
+        {project.health}
+       </span>
+
+      </div>
+
+     </div>
+
+    )}
+
+   </div>
+
+  </div>
+
+ );
+
+}
+
+
+/* =========================
+ KANBAN
+========================= */
+
+function Kanban({
+ tasks
+}){
+
+ const columns=[
+
+  ["todo","TO DO"],
+
+  ["progress","IN PROGRESS"],
+
+  ["done","COMPLETED"]
+
+ ];
+
+
+ return(
+
+  <div className="kanban">
+
+   {columns.map(
+    ([status,title])=>{
+
+     const list=
+      tasks.filter(
+       task=>task.status===status
+      );
+
+     return(
+
+      <div
+       className="column"
+       key={status}
+      >
+
+       <div className="columnTitle">
+
+        <span>
+         {title}
+        </span>
+
+        <span>
+         {list.length}
+        </span>
+
+       </div>
+
+
+       {list.map(task=>
+
+        <div
+         className="kanbanTask"
+         key={task.id}
+        >
+
+         <div>
+          {task.title}
+         </div>
+
+         <div
+          style={{
+           color:"var(--muted)",
+           marginTop:"6px",
+           fontSize:"7px"
+          }}
+         >
+          {task.project} · {task.priority}
+         </div>
+
+        </div>
+
+       )}
+
+      </div>
+
+     );
 
     }
 
+   )}
 
-    return (
+  </div>
 
-        <div className="overlay">
-
-            <div className="modal">
-
-                <div className="modalHead">
-
-                    <div>
-
-                        <div className="eyebrow">
-                            TASK CREATOR
-                        </div>
-
-                        <h2>
-                            Create New Task
-                        </h2>
-
-                    </div>
-
-                    <button
-                        className="iconButton"
-                        onClick={onClose}
-                    >
-                        ×
-                    </button>
-
-                </div>
-
-
-                <form onSubmit={submit}>
-
-                    <label>
-
-                        TASK NAME
-
-                        <input
-                            autoFocus
-                            value={title}
-                            onChange={
-                                e=>setTitle(e.target.value)
-                            }
-                            placeholder="Enter your task..."
-                        />
-
-                    </label>
-
-
-                    <div className="modalGrid">
-
-                        <label>
-
-                            PRIORITY
-
-                            <select
-                                value={priority}
-                                onChange={
-                                    e=>setPriority(
-                                        e.target.value
-                                    )
-                                }
-                            >
-
-                                <option value="high">
-                                    High
-                                </option>
-
-                                <option value="medium">
-                                    Medium
-                                </option>
-
-                                <option value="low">
-                                    Low
-                                </option>
-
-                            </select>
-
-                        </label>
-
-
-                        <label>
-
-                            PROJECT
-
-                            <input
-                                value="Nexus Core"
-                                readOnly
-                            />
-
-                        </label>
-
-                    </div>
-
-
-                    <div className="modalActions">
-
-                        <button
-                            type="button"
-                            className="secondary"
-                            onClick={onClose}
-                        >
-                            Cancel
-                        </button>
-
-                        <button
-                            className="primary"
-                        >
-                            Create Task
-                        </button>
-
-                    </div>
-
-                </form>
-
-            </div>
-
-        </div>
-
-    );
+ );
 
 }
 
 
+/* =========================
+ TEAM
+========================= */
+
+function Team(){
+
+ return(
+
+  <div className="card">
+
+   <div className="cardHead">
+
+    <div>
+
+     <h2>
+      Team Operations
+     </h2>
+
+     <p>
+      Workload and capacity intelligence
+     </p>
+
+    </div>
+
+   </div>
+
+
+   {MEMBERS.map(
+    ([initials,name,role,load])=>
+
+    <div
+     className="member"
+     key={name}
+    >
+
+     <div className="memberLeft">
+
+      <div className="miniAvatar">
+       {initials}
+      </div>
+
+      <div>
+
+       <div className="memberName">
+        {name}
+       </div>
+
+       <div className="memberRole">
+        {role}
+       </div>
+
+      </div>
+
+     </div>
+
+
+     <div className="load">
+
+      <div style={{
+       color:"var(--muted)",
+       fontSize:"7px",
+       marginBottom:"4px"
+      }}>
+       {load}% load
+      </div>
+
+      <div className="loadBar">
+
+       <div
+        style={{
+         width:load+"%",
+         background:
+          load>85
+           ?"var(--red)"
+           :"var(--green)"
+        }}
+       />
+
+      </div>
+
+     </div>
+
+    </div>
+
+   )}
+
+  </div>
+
+ );
+
+}
+
+
+/* =========================
+ ANALYTICS
+========================= */
+
+function Analytics({
+ tasks,
+ productivity
+}){
+
+ const high=
+  tasks.filter(
+   t=>t.priority==="high"
+  ).length;
+
+ const medium=
+  tasks.filter(
+   t=>t.priority==="medium"
+  ).length;
+
+ const low=
+  tasks.filter(
+   t=>t.priority==="low"
+  ).length;
+
+
+ return(
+
+  <div className="mainGrid">
+
+   <div>
+
+    <WeeklyChart/>
+
+    <div className="card">
+
+     <div className="cardHead">
+
+      <div>
+
+       <h2>
+        Priority Distribution
+       </h2>
+
+       <p>
+        Current workload composition
+       </p>
+
+      </div>
+
+     </div>
+
+
+     <Metric
+      label="High priority"
+      value={high}
+     />
+
+     <Metric
+      label="Medium priority"
+      value={medium}
+     />
+
+     <Metric
+      label="Low priority"
+      value={low}
+     />
+
+    </div>
+
+   </div>
+
+
+   <div>
+
+    <div className="card ai">
+
+     <div className="eyebrow">
+      PERFORMANCE ENGINE
+     </div>
+
+     <div style={{
+      fontSize:"35px",
+      fontWeight:"bold",
+      marginTop:"10px"
+     }}>
+      {productivity}%
+     </div>
+
+     <p style={{
+      color:"#8799b0",
+      fontSize:"9px",
+      marginTop:"5px"
+     }}>
+      Overall productivity score
+     </p>
+
+     <div className="progress">
+
+      <div
+       className="progressFill"
+       style={{
+        width:productivity+"%"
+       }}
+      />
+
+     </div>
+
+    </div>
+
+
+    <div className="card">
+
+     <div className="cardHead">
+
+      <div>
+
+       <h2>
+        Operational Signals
+       </h2>
+
+       <p>
+        Automated system indicators
+       </p>
+
+      </div>
+
+     </div>
+
+     <Metric
+      label="Project health"
+      value="92%"
+     />
+
+     <Metric
+      label="Delivery confidence"
+      value="High"
+     />
+
+     <Metric
+      label="Risk detection"
+      value="Active"
+     />
+
+     <Metric
+      label="Automation"
+      value="Enabled"
+     />
+
+    </div>
+
+   </div>
+
+  </div>
+
+ );
+
+}
+
+
+/* =========================
+ TASK MODAL
+========================= */
+
+function TaskModal({
+ onClose,
+ onAdd
+}){
+
+ const [title,setTitle]=
+  useState("");
+
+ const [priority,setPriority]=
+  useState("medium");
+
+ const [project,setProject]=
+  useState("Nexus Core");
+
+
+ function submit(e){
+
+  e.preventDefault();
+
+  onAdd(
+   title,
+   priority,
+   project
+  );
+
+ }
+
+
+ return(
+
+  <div className="overlay">
+
+   <div className="modal">
+
+    <div className="modalHead">
+
+     <div>
+
+      <div className="eyebrow">
+       WORK ITEM
+      </div>
+
+      <h2>
+       Create New Task
+      </h2>
+
+     </div>
+
+     <button
+      className="icon"
+      onClick={onClose}
+     >
+      ×
+     </button>
+
+    </div>
+
+
+    <form onSubmit={submit}>
+
+     <label>
+
+      TASK TITLE
+
+      <input
+       autoFocus
+       value={title}
+       onChange={
+        e=>setTitle(e.target.value)
+       }
+       placeholder="Example: Build notification service"
+      />
+
+     </label>
+
+
+     <div className="modalGrid">
+
+      <label>
+
+       PRIORITY
+
+       <select
+        value={priority}
+        onChange={
+         e=>setPriority(
+          e.target.value
+         )
+        }
+       >
+
+        <option value="high">
+         High
+        </option>
+
+        <option value="medium">
+         Medium
+        </option>
+
+        <option value="low">
+         Low
+        </option>
+
+       </select>
+
+      </label>
+
+
+      <label>
+
+       PROJECT
+
+       <select
+        value={project}
+        onChange={
+         e=>setProject(
+          e.target.value
+         )
+        }
+       >
+
+        {PROJECTS.map(
+         p=>
+
+         <option
+          key={p.name}
+         >
+          {p.name}
+         </option>
+
+        )}
+
+       </select>
+
+      </label>
+
+     </div>
+
+
+     <label>
+
+      DESCRIPTION
+
+      <textarea
+       placeholder="Describe the work item..."
+      />
+
+     </label>
+
+
+     <div className="modalActions">
+
+      <button
+       type="button"
+       className="secondary"
+       onClick={onClose}
+      >
+       Cancel
+      </button>
+
+      <button className="primary">
+       Create Task
+      </button>
+
+     </div>
+
+    </form>
+
+   </div>
+
+  </div>
+
+ );
+
+}
+
+
+/* =========================
+ COMMAND PALETTE
+========================= */
+
+function CommandPalette({
+ close,
+ action
+}){
+
+ const [query,setQuery]=
+  useState("");
+
+
+ const commands=[
+
+  ["task","＋ Create a new task"],
+
+  ["completed","✓ Show completed tasks"],
+
+  ["analytics","◫ Open analytics"],
+
+  ["kanban","▤ Open Kanban board"]
+
+ ];
+
+
+ const filtered=
+  commands.filter(
+   item=>
+    item[1]
+     .toLowerCase()
+     .includes(query.toLowerCase())
+  );
+
+
+ return(
+
+  <div
+   className="command"
+   onClick={close}
+  >
+
+   <div
+    className="commandBox"
+    onClick={
+     e=>e.stopPropagation()
+    }
+   >
+
+    <input
+     className="commandInput"
+     autoFocus
+     value={query}
+     onChange={
+      e=>setQuery(e.target.value)
+     }
+     placeholder="Type a command..."
+    />
+
+
+    <div className="commandHint">
+     NEXUS COMMAND CENTER
+    </div>
+
+
+    {filtered.map(
+     ([id,label])=>
+
+     <div
+      className="commandItem"
+      key={id}
+      onClick={
+       ()=>action(id)
+      }
+     >
+      {label}
+     </div>
+
+    )}
+
+   </div>
+
+  </div>
+
+ );
+
+}
+
+
+/* =========================
+ RENDER
+========================= */
+
 ReactDOM
-    .createRoot(
-        document.getElementById("root")
-    )
-    .render(<App/>);
+ .createRoot(
+  document.getElementById("root")
+ )
+ .render(
+  <App/>
+ );
 
 </script>
+
+<style>
+
+.toast{
+ position:fixed;
+ right:20px;
+ bottom:20px;
+ z-index:300;
+ background:#edf4ff;
+ color:#07111f;
+ padding:11px 15px;
+ border-radius:8px;
+ font-size:9px;
+ font-weight:bold;
+ box-shadow:0 15px 50px #0008;
+}
+
+</style>
 
 </body>
 </html>
