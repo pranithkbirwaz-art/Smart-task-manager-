@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Mock Test</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: #eef2f7;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1d4ed8;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .start-btn,
+        .next-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .prev-btn {
+            background: #64748b;
+            color: white;
+        }
+
+        .option {
+            display: block;
+            width: 100%;
+            text-align: left;
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            margin: 10px 0;
+        }
+
+        .option:hover {
+            background: #dbeafe;
+        }
+
+        .selected {
+            background: #bfdbfe;
+            border: 2px solid #2563eb;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        #timer {
+            color: red;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 10px;
+            background: #ddd;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        #progress {
+            height: 100%;
+            width: 0%;
+            background: #2563eb;
+            border-radius: 10px;
+            transition: width 0.2s ease;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .result {
+            text-align: center;
+        }
+
+        .score {
+            font-size: 40px;
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        .review {
+            margin-top: 20px;
+        }
+
+        .review-item {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            line-height: 1.6;
+        }
+
+        .correct {
+            background: #dcfce7;
+        }
+
+        .wrong {
+            background: #fee2e2;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 94%;
+                margin: 20px auto;
+                padding: 20px;
+            }
+
+            .top-bar {
+                flex-direction: column;
+            }
+
+            .navigation {
+                flex-direction: column;
+            }
+
+            .navigation button {
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- START PAGE -->
+    <div id="startScreen">
+
+        <h1>Online Mock Test</h1>
+
+        <p>Welcome to the Computer Science Mock Test.</p>
+
+        <label for="studentName">Student Name:</label>
+
+        <input
+            type="text"
+            id="studentName"
+            placeholder="Enter your name"
+            autocomplete="name"
+        >
+
+        <button
+            type="button"
+            class="start-btn"
+            onclick="startTest()"
+        >
+            Start Test
+        </button>
+
+    </div>
+
+
+    <!-- QUIZ PAGE -->
+    <div id="quizScreen" class="hidden">
+
+        <div class="top-bar">
+            <span id="questionNumber">Question 1 of 10</span>
+            <span id="timer">10:00</span>
+        </div>
+
+        <div class="progress-container">
+            <div id="progress"></div>
+        </div>
+
+        <h2 id="question">Question</h2>
+
+        <div id="options"></div>
+
+        <div class="navigation">
+
+            <button
+                type="button"
+                class="prev-btn"
+                onclick="previousQuestion()"
+            >
+                Previous
+            </button>
+
+            <button
+                type="button"
+                class="next-btn"
+                onclick="nextQuestion()"
+            >
+                Next
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- RESULT PAGE -->
+    <div id="resultScreen" class="hidden">
+
+        <div class="result">
+
+            <h1>Test Completed</h1>
+
+            <p id="studentResult"></p>
+
+            <div class="score" id="score">0 / 10</div>
+
+            <p id="percentage"></p>
+
+            <button
+                type="button"
+                class="start-btn"
+                onclick="restartTest()"
+            >
+                Take Test Again
+            </button>
+
+        </div>
+
+        <div class="review">
+            <h2>Answer Review</h2>
+            <div id="review"></div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+    // ===============================
+    // QUESTIONS
+    // ===============================
+
+    const questions = [
+        {
+            question: "Which data structure follows the LIFO principle?",
+            options: ["Queue", "Stack", "Linked List", "Tree"],
+            answer: 1
+        },
+        {
+            question: "Which SQL command is used to retrieve data?",
+            options: ["INSERT", "UPDATE", "SELECT", "DELETE"],
+            answer: 2
+        },
+        {
+            question: "Which protocol is used for secure web communication?",
+            options: ["HTTP", "FTP", "HTTPS", "SMTP"],
+            answer: 2
+        },
+        {
+            question: "What is the primary function of an operating system?",
+            options: [
+                "Create websites",
+                "Manage computer resources",
+                "Design databases",
+                "Create graphics"
+            ],
+            answer: 1
+        },
+        {
+            question: "Which language is used to style web pages?",
+            options: ["HTML", "CSS", "SQL", "Python"],
+            answer: 1
+        },
+        {
+            question: "Which is a relational database system?",
+            options: ["MySQL", "Photoshop", "Linux", "Chrome"],
+            answer: 0
+        },
+        {
+            question: "What does CPU stand for?",
+            options: [
+                "Central Processing Unit",
+                "Computer Program Utility",
+                "Central Program User",
+                "Control Processing Utility"
+            ],
+            answer: 0
+        },
+        {
+            question: "Which HTTP status code means Not Found?",
+            options: ["200", "301", "404", "500"],
+            answer: 2
+        },
+        {
+            question: "Which technology makes web pages interactive?",
+            options: ["JavaScript", "SQL", "XML", "SMTP"],
+            answer: 0
+        },
+        {
+            question: "Which device connects different networks?",
+            options: ["Monitor", "Router", "Keyboard", "Printer"],
+            answer: 1
+        }
+    ];
+
+
+    // ===============================
+    // VARIABLES
+    // ===============================
+
+    let currentQuestion = 0;
+    let userAnswers = new Array(questions.length).fill(null);
+    let timeLeft = 600;
+    let timer = null;
+    let testFinished = false;
+
+
+    // ===============================
+    // START TEST
+    // ===============================
+
+    function startTest() {
+        const name = document.getElementById("studentName").value.trim();
+
+        if (name === "") {
+            alert("Please enter your name.");
+            document.getElementById("studentName").focus();
+            return;
+        }
+
+        document.getElementById("startScreen").classList.add("hidden");
+        document.getElementById("resultScreen").classList.add("hidden");
+        document.getElementById("quizScreen").classList.remove("hidden");
+
+        currentQuestion = 0;
+        userAnswers = new Array(questions.length).fill(null);
+        timeLeft = 600;
+        testFinished = false;
+
+        updateTimerDisplay();
+        displayQuestion();
+
+        clearInterval(timer);
+        timer = setInterval(updateTimer, 1000);
+    }
+
+
+    // ===============================
+    // DISPLAY QUESTION
+    // ===============================
+
+    function displayQuestion() {
+        const q = questions[currentQuestion];
+
+        document.getElementById("question").innerText = q.question;
+
+        document.getElementById("questionNumber").innerText =
+            "Question " +
+            (currentQuestion + 1) +
+            " of " +
+            questions.length;
+
+        const progress =
+            ((currentQuestion + 1) / questions.length) * 100;
+
+        document.getElementById("progress").style.width =
+            progress + "%";
+
+
+        // Render options
+        const optionsDiv = document.getElementById("options");
+        optionsDiv.innerHTML = "";
+
+        q.options.forEach(function(option, index) {
+            const button = document.createElement("button");
+
+            button.type = "button";
+            button.innerText =
+                String.fromCharCode(65 + index) + ". " + option;
+
+            button.className = "option";
+
+            if (userAnswers[currentQuestion] === index) {
+                button.classList.add("selected");
+            }
+
+            button.onclick = function() {
+                selectAnswer(index);
+            };
+
+            optionsDiv.appendChild(button);
+        });
+
+
+        // Previous button
+        document.querySelector(".prev-btn").disabled =
+            currentQuestion === 0;
+
+
+        // Next / Submit button
+        const nextButton = document.querySelector(".next-btn");
+
+        if (currentQuestion === questions.length - 1) {
+            nextButton.innerText = "Submit Test";
+        } else {
+            nextButton.innerText = "Next";
+        }
+    }
+
+
+    // ===============================
+    // SELECT ANSWER
+    // ===============================
+
+    function selectAnswer(index) {
+        userAnswers[currentQuestion] = index;
+        displayQuestion();
+    }
+
+
+    // ===============================
+    // NEXT QUESTION
+    // ===============================
+
+    function nextQuestion() {
+        if (currentQuestion < questions.length - 1) {
+            currentQuestion++;
+            displayQuestion();
+        } else {
+            finishTest();
+        }
+    }
+
+
+    // ===============================
+    // PREVIOUS QUESTION
+    // ===============================
+
+    function previousQuestion() {
+        if (currentQuestion > 0) {
+            currentQuestion--;
+            displayQuestion();
+        }
+    }
+
+
+    // ===============================
+    // TIMER
+    // ===============================
+
+    function updateTimer() {
+        if (testFinished) return;
+
+        if (timeLeft > 0) {
+            timeLeft--;
+        }
+
+        updateTimerDisplay();
+
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            alert("Time is over! Your test will be submitted automatically.");
+            finishTest();
+        }
+    }
+
+
+    function updateTimerDisplay() {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+
+        document.getElementById("timer").innerText =
+            String(minutes).padStart(2, "0") +
+            ":" +
+            String(seconds).padStart(2, "0");
+    }
+
+
+    // ===============================
+    // FINISH TEST
+    // ===============================
+
+    function finishTest() {
+        if (testFinished) return;
+
+        testFinished = true;
+        clearInterval(timer);
+
+        let score = 0;
+
+        questions.forEach(function(question, index) {
+            if (userAnswers[index] === question.answer) {
+                score++;
+            }
+        });
+
+        const percentage =
+            (score / questions.length) * 100;
+
+        document.getElementById("quizScreen")
+            .classList.add("hidden");
+
+        document.getElementById("resultScreen")
+            .classList.remove("hidden");
+
+        const name =
+            document.getElementById("studentName").value.trim();
+
+        document.getElementById("studentResult").innerText =
+            "Student: " + name;
+
+        document.getElementById("score").innerText =
+            score + " / " + questions.length;
+
+        document.getElementById("percentage").innerText =
+            "Percentage: " + percentage.toFixed(0) + "%";
+
+        showReview();
+    }
+
+
+    // ===============================
+    // ANSWER REVIEW
+    // ===============================
+
+    function showReview() {
+        const review = document.getElementById("review");
+        review.innerHTML = "";
+
+        questions.forEach(function(question, index) {
+            const div = document.createElement("div");
+
+            div.className = "review-item";
+
+            const userAnswer = userAnswers[index];
+
+            if (userAnswer === question.answer) {
+                div.classList.add("correct");
+
+                div.innerHTML =
+                    "<b>Question " + (index + 1) +
+                    ":</b> Correct<br>" +
+                    "Answer: " +
+                    question.options[question.answer];
+            } else {
+                div.classList.add("wrong");
+
+                div.innerHTML =
+                    "<b>Question " + (index + 1) +
+                    ":</b> Wrong<br>" +
+                    "Your Answer: " +
+                    (
+                        userAnswer === null
+                            ? "Not Answered"
+                            : question.options[userAnswer]
+                    ) +
+                    "<br>" +
+                    "Correct Answer: " +
+                    question.options[question.answer];
+            }
+
+            review.appendChild(div);
+        });
+    }
+
+
+    // ===============================
+    // RESTART TEST
+    // ===============================
+
+    function restartTest() {
+        clearInterval(timer);
+
+        document.getElementById("resultScreen")
+            .classList.add("hidden");
+
+        document.getElementById("startScreen")
+            .classList.remove("hidden");
+
+        document.getElementById("studentName").value = "";
+
+        currentQuestion = 0;
+        userAnswers = new Array(questions.length).fill(null);
+        timeLeft = 600;
+        testFinished = false;
+
+        updateTimerDisplay();
+    }
+
+
+    // ===============================
+    // ENTER KEY SUPPORT
+    // ===============================
+
+    document.getElementById("studentName").addEventListener(
+        "keydown",
+        function(event) {
+            if (event.key === "Enter") {
+                startTest();
+            }
+        }
+    );
+</script>
+
+</body>
+</html>
